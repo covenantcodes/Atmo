@@ -8,6 +8,7 @@ import {
   ScrollView,
   Alert,
   Pressable,
+  TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -33,8 +34,10 @@ import { getColors } from "../utils/colors";
 import { FONTFAMILY, FONTSIZE } from "../utils/fonts";
 import WeatherIconMapper from "../components/weather-icons/WeatherIconMapper";
 import AnimatedCounter from "../components/AnimatedCounter";
+import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen: React.FC = () => {
+  const navigation = useNavigation();
   const [colorScheme, setColorScheme] = useState<"light" | "dark">("light");
 
   const toggleColorScheme = () => {
@@ -377,6 +380,9 @@ const HomeScreen: React.FC = () => {
             </Animated.View>
           </Animated.View>
         </ScrollView>
+        <TouchableOpacity onPress={() => navigation.navigate("WeatherDetails")}>
+          <Text>Navigatttteee</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </LinearGradient>
   );
