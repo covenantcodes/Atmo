@@ -33,7 +33,6 @@ import { getColors } from "../utils/colors";
 import { FONTFAMILY, FONTSIZE } from "../utils/fonts";
 import WeatherIconMapper from "../components/weather-icons/WeatherIconMapper";
 import AnimatedCounter from "../components/AnimatedCounter";
-import CompassIcon from "../components/CompassIcon";
 
 const HomeScreen: React.FC = () => {
   const [colorScheme, setColorScheme] = useState<"light" | "dark">("light");
@@ -60,10 +59,6 @@ const HomeScreen: React.FC = () => {
   const animatedCompassValue = useDerivedValue(() =>
     withTiming(windDirection, { duration: 800 })
   );
-
-  const animatedCompassStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${animatedCompassValue.value}deg` }],
-  }));
 
   const triggerDataAnimations = useCallback(() => {
     // Reset animations
@@ -267,9 +262,6 @@ const HomeScreen: React.FC = () => {
                   <Text style={[styles.detailLabel, { color: colors.white }]}>
                     Wind
                   </Text>
-                  <Animated.View style={animatedCompassStyle}>
-                    <CompassIcon size={40} direction={0} color={colors.white} />
-                  </Animated.View>
                   <AnimatedCounter
                     value={weatherData ? weatherData.windSpeed : 0}
                     suffix=" km/h"
