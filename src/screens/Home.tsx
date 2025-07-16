@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -17,15 +17,18 @@ import Animated, {
   withTiming,
   withRepeat,
   withSequence,
+  withSpring,
 } from "react-native-reanimated";
 import {
   fetchWeatherData,
   getWeatherCondition,
   WeatherData,
 } from "../services/weatherService";
-import { getBackgroundColors, getWeatherIcon } from "../utils/weatherUtils";
+import { getBackgroundColors } from "../utils/weatherUtils";
 import { getColors } from "../utils/colors";
 import { FONTFAMILY, FONTSIZE } from "../utils/fonts";
+import WeatherIconMapper from "../components/weather-icons/WeatherIconMapper";
+import AnimatedCounter from "../components/AnimatedCounter";
 
 const HomeScreen: React.FC = () => {
   const colorScheme = useColorScheme();
@@ -40,6 +43,19 @@ const HomeScreen: React.FC = () => {
   const fadeInValue = useSharedValue(0);
   const scaleValue = useSharedValue(0.8);
   const rotateValue = useSharedValue(0);
+  const slideInValue = useSharedValue(-50);
+
+  const triggerDataAnimations = useCallback(() => {
+    // Reset animations
+    fadeInValue.value = 0;
+    scaleValue.value = 0.8;
+    slideInValue.value = -50;
+
+    // Trigger animations
+    fadeInValue.value = withTiming(1, { duration: 800 });
+    scaleValue.value = withSpring(1, { damping: 12, stiffness: 150 });
+    slideInValue.value = withTiming(0, { duration: 600 });
+  }, []);
 
   const loadWeatherData = async (isRefresh = false) => {
     try {
@@ -49,9 +65,7 @@ const HomeScreen: React.FC = () => {
       const data = await fetchWeatherData();
       setWeatherData(data);
 
-      // Trigger animations
-      fadeInValue.value = withTiming(1, { duration: 800 });
-      scaleValue.value = withTiming(1, { duration: 600 });
+      triggerDataAnimations();
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to load weather data";
@@ -70,13 +84,6 @@ const HomeScreen: React.FC = () => {
 
   useEffect(() => {
     loadWeatherData();
-
-    // Auto-refresh every 10 minutes
-    const interval = setInterval(() => {
-      loadWeatherData(true);
-    }, 10 * 60 * 1000);
-
-    return () => clearInterval(interval);
   }, []);
 
   // Start rotation animation for loading
@@ -101,6 +108,12 @@ const HomeScreen: React.FC = () => {
   const animatedIconStyle = useAnimatedStyle(() => {
     return {
       transform: [{ rotate: `${rotateValue.value}deg` }],
+    };
+  });
+
+  const animatedSlideStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: slideInValue.value }],
     };
   });
 
@@ -179,7 +192,7 @@ const HomeScreen: React.FC = () => {
         >
           <Animated.View style={[styles.content, animatedContentStyle]}>
             {/* Location Header */}
-            <View style={styles.header}>
+            <Animated.View style={[styles.header, animatedSlideStyle]}>
               <Text style={[styles.locationText, { color: colors.white }]}>
                 Berlin, Germany
               </Text>
@@ -188,25 +201,50 @@ const HomeScreen: React.FC = () => {
                   ? new Date(weatherData.timestamp).toLocaleTimeString()
                   : ""}
               </Text>
-            </View>
+            </Animated.View>
 
             {/* Main Weather Display */}
             <View style={styles.mainWeather}>
-              <Text style={styles.weatherIcon}>
-                {weatherData ? getWeatherIcon(weatherData.weatherCode) : "☁️"}
-              </Text>
-              <Text style={[styles.temperature, { color: colors.white }]}>
-                {weatherData ? Math.round(weatherData.temperature) : "--"}°C
-              </Text>
-              <Text style={[styles.condition, { color: colors.white }]}>
+              {/* Animated Weather Icon */}
+              {weatherData && (
+                <View style={styles.iconContainer}>
+                  <WeatherIconMapper
+                    weatherCode={weatherData.weatherCode}
+                    windSpeed={weatherData.windSpeed}
+                    size={100}
+                    iconColor={colors.white}
+                  />
+                </View>
+              )}
+
+              {/* Animated Temperature */}
+              <View style={styles.temperatureContainer}>
+                <AnimatedCounter
+                  value={weatherData ? weatherData.temperature : 0}
+                  suffix="°C"
+                  duration={1200}
+                  decimals={0}
+                  style={[styles.temperature, { color: colors.white }]}
+                />
+              </View>
+
+              <Animated.Text
+                style={[
+                  styles.condition,
+                  { color: colors.white },
+                  animatedSlideStyle,
+                ]}
+              >
                 {weatherData
                   ? getWeatherCondition(weatherData.weatherCode)
                   : "Loading..."}
-              </Text>
+              </Animated.Text>
             </View>
 
             {/* Weather Details */}
-            <View style={styles.detailsContainer}>
+            <Animated.View
+              style={[styles.detailsContainer, animatedSlideStyle]}
+            >
               <View
                 style={[
                   styles.detailCard,
@@ -216,9 +254,13 @@ const HomeScreen: React.FC = () => {
                 <Text style={[styles.detailLabel, { color: colors.white }]}>
                   Wind Speed
                 </Text>
-                <Text style={[styles.detailValue, { color: colors.white }]}>
-                  {weatherData ? `${weatherData.windSpeed} km/h` : "--"}
-                </Text>
+                <AnimatedCounter
+                  value={weatherData ? weatherData.windSpeed : 0}
+                  suffix=" km/h"
+                  duration={1000}
+                  decimals={1}
+                  style={[styles.detailValue, { color: colors.white }]}
+                />
               </View>
 
               <View
@@ -234,7 +276,7 @@ const HomeScreen: React.FC = () => {
                   {weatherData ? weatherData.weatherCode : "--"}
                 </Text>
               </View>
-            </View>
+            </Animated.View>
           </Animated.View>
         </ScrollView>
       </SafeAreaView>
@@ -248,6 +290,12 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+  },
+  timerContainer: {
+    position: "absolute",
+    top: 60,
+    right: 20,
+    zIndex: 1000,
   },
   scrollContent: {
     flexGrow: 1,
@@ -305,15 +353,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 50,
   },
-  weatherIcon: {
-    fontSize: 80,
+  iconContainer: {
     marginBottom: 20,
+  },
+  temperatureContainer: {
+    marginBottom: 10,
   },
   temperature: {
     fontFamily: FONTFAMILY.bold,
     fontSize: 72,
     fontWeight: "300",
-    marginBottom: 10,
   },
   condition: {
     fontFamily: FONTFAMILY.medium,

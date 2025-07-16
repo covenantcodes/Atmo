@@ -20,8 +20,8 @@ interface WindyIconProps {
 
 const WindyIcon: React.FC<WindyIconProps> = ({
   size = 80,
-  leafColor = "#228B22",
-  windColor = "#87CEEB",
+  leafColor = "#FFFFFF",
+  windColor = "#F0F0F0",
 }) => {
   const leafPosition = useSharedValue(0);
   const leafRotation = useSharedValue(0);

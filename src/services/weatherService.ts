@@ -16,30 +16,53 @@ export interface WeatherResponse {
   };
 }
 
-const BERLIN_WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,weathercode,windspeed_10m';
+// const BERLIN_WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,weathercode,windspeed_10m';
+const BERLIN_WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=59.9139&longitude=10.7522&current=temperature_2m,weathercode,windspeed_10m';
 
 export const fetchWeatherData = async (): Promise<WeatherData> => {
   try {
+    console.log('🌤️ Fetching weather data from:', BERLIN_WEATHER_URL);
+    
     const response = await axios.get<WeatherResponse>(BERLIN_WEATHER_URL, {
       timeout: 10000, 
     });
 
+    console.log('📡 Raw API Response:', JSON.stringify(response.data, null, 2));
+    
     const { current } = response.data;
+    
+    console.log('🌡️ Current weather data:', {
+      temperature: current.temperature_2m,
+      weatherCode: current.weathercode,
+      windSpeed: current.windspeed_10m,
+      timestamp: current.time
+    });
 
-    return {
+    const weatherData = {
       temperature: current.temperature_2m,
       weatherCode: current.weathercode,
       windSpeed: current.windspeed_10m,
       timestamp: current.time,
     };
+
+    console.log('✅ Processed weather data:', weatherData);
+    
+    return weatherData;
   } catch (error) {
+    console.error('❌ Weather API Error:', error);
+    
     if (axios.isAxiosError(error)) {
+      console.error('📊 Axios error details:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data
+      });
       throw new Error(`Weather API Error: ${error.message}`);
     }
     throw new Error('Failed to fetch weather data');
   }
 };
-
 
 export const getWeatherCondition = (weatherCode: number): string => {
   const weatherConditions: Record<number, string> = {
@@ -73,5 +96,8 @@ export const getWeatherCondition = (weatherCode: number): string => {
     99: 'Thunderstorm with heavy hail',
   };
 
-  return weatherConditions[weatherCode] || 'Unknown weather condition';
+  const condition = weatherConditions[weatherCode] || 'Unknown weather condition';
+  console.log(`🌤️ Weather condition for code ${weatherCode}:`, condition);
+  
+  return condition;
 };
