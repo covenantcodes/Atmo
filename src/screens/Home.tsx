@@ -4,10 +4,10 @@ import {
   Text,
   StyleSheet,
   useColorScheme,
-  ActivityIndicator,
   RefreshControl,
   ScrollView,
   Alert,
+  Pressable,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,7 +16,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   withRepeat,
-  withSequence,
+  useDerivedValue,
   withSpring,
 } from "react-native-reanimated";
 import {
@@ -33,9 +33,15 @@ import { getColors } from "../utils/colors";
 import { FONTFAMILY, FONTSIZE } from "../utils/fonts";
 import WeatherIconMapper from "../components/weather-icons/WeatherIconMapper";
 import AnimatedCounter from "../components/AnimatedCounter";
+import CompassIcon from "../components/CompassIcon";
 
 const HomeScreen: React.FC = () => {
-  const colorScheme = useColorScheme();
+  const [colorScheme, setColorScheme] = useState<"light" | "dark">("light");
+
+  const toggleColorScheme = () => {
+    setColorScheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
+
   const colors = getColors(colorScheme);
 
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
@@ -48,6 +54,16 @@ const HomeScreen: React.FC = () => {
   const scaleValue = useSharedValue(0.8);
   const rotateValue = useSharedValue(0);
   const slideInValue = useSharedValue(-50);
+
+  const windDirection = weatherData ? weatherData.windDirection : 0;
+
+  const animatedCompassValue = useDerivedValue(() =>
+    withTiming(windDirection, { duration: 800 })
+  );
+
+  const animatedCompassStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${animatedCompassValue.value}deg` }],
+  }));
 
   const triggerDataAnimations = useCallback(() => {
     // Reset animations
@@ -164,6 +180,13 @@ const HomeScreen: React.FC = () => {
       style={styles.container}
     >
       <SafeAreaView style={styles.safeArea}>
+        <View style={styles.toggleContainer}>
+          <Pressable onPress={toggleColorScheme} style={styles.toggleButton}>
+            <Text style={styles.toggleButtonText}>
+              {colorScheme === "light" ? "🌙" : "☀️"}
+            </Text>
+          </Pressable>
+        </View>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           refreshControl={
@@ -244,6 +267,9 @@ const HomeScreen: React.FC = () => {
                   <Text style={[styles.detailLabel, { color: colors.white }]}>
                     Wind
                   </Text>
+                  <Animated.View style={animatedCompassStyle}>
+                    <CompassIcon size={40} direction={0} color={colors.white} />
+                  </Animated.View>
                   <AnimatedCounter
                     value={weatherData ? weatherData.windSpeed : 0}
                     suffix=" km/h"
@@ -370,6 +396,7 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+    paddingHorizontal: 10,
   },
   timerContainer: {
     position: "absolute",
@@ -491,6 +518,24 @@ const styles = StyleSheet.create({
     fontSize: FONTSIZE.xs,
     marginTop: 4,
     opacity: 0.7,
+  },
+  toggleContainer: {
+    alignItems: "flex-end",
+    marginBottom: 20,
+    width: "100%",
+    marginRight: 40,
+  },
+  toggleButton: {
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 30,
+    padding: 10,
+    paddingHorizontal: 15,
+    elevation: 2,
+  },
+  toggleButtonText: {
+    fontFamily: FONTFAMILY.medium,
+    fontSize: FONTSIZE.md,
+    color: "white",
   },
 });
 

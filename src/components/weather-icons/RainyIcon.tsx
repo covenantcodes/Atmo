@@ -10,10 +10,53 @@ import Svg, {
   Stop,
   SvgProps,
 } from "react-native-svg";
+import Animated, {
+  useSharedValue,
+  useAnimatedProps,
+  withRepeat,
+  withTiming,
+  withDelay,
+  interpolate,
+} from "react-native-reanimated";
+
+const AnimatedPath = Animated.createAnimatedComponent(Path);
+
 interface RainyIconProps extends SvgProps {
   size?: number;
 }
 const RainyIcon = ({ size = 80, ...props }: RainyIconProps) => {
+  const drop1 = useSharedValue(0);
+  const drop2 = useSharedValue(0);
+  const drop3 = useSharedValue(0);
+  const drop4 = useSharedValue(0);
+
+  React.useEffect(() => {
+    const animateDrop = (drop: typeof drop1, delay: number) => {
+      drop.value = withDelay(
+        delay,
+        withRepeat(withTiming(1, { duration: 1200 }), -1, false)
+      );
+    };
+    animateDrop(drop1, 0);
+    animateDrop(drop2, 300);
+    animateDrop(drop3, 600);
+    animateDrop(drop4, 900);
+  }, []);
+
+  const createDropAnimatedProps = (
+    progress: typeof drop1,
+    yFrom: number,
+    yTo: number
+  ) =>
+    useAnimatedProps(() => ({
+      transform: [
+        {
+          translateY: interpolate(progress.value, [0, 1], [yFrom, yTo]),
+        },
+      ],
+      opacity: interpolate(progress.value, [0, 0.9, 1], [1, 1, 0]),
+    }));
+
   return (
     <Svg
       width={size}
@@ -65,37 +108,42 @@ const RainyIcon = ({ size = 80, ...props }: RainyIconProps) => {
         />
       </G>
       <G filter="url(#filter2_dd_2_220)">
-        <Path
+        <AnimatedPath
           d="M165.708 169.3C169.01 165.062 175.798 167.127 176.181 172.485L177.354 188.919C177.963 197.448 169.83 203.936 161.65 201.448C153.47 198.959 150.328 189.041 155.583 182.297L165.708 169.3Z"
           fill="url(#paint4_linear_2_220)"
           stroke="url(#paint5_linear_2_220)"
           strokeWidth={2}
+          animatedProps={createDropAnimatedProps(drop1, 0, 30)}
         />
-        <Path
+        <AnimatedPath
           d="M223.216 169.3C226.517 165.062 233.305 167.127 233.688 172.485L234.862 188.919C235.471 197.448 227.337 203.936 219.157 201.448C210.977 198.959 207.835 189.041 213.09 182.297L223.216 169.3Z"
           fill="url(#paint6_linear_2_220)"
           stroke="url(#paint7_linear_2_220)"
           strokeWidth={2}
+          animatedProps={createDropAnimatedProps(drop2, 0, 30)}
         />
-        <Path
+        <AnimatedPath
           d="M280.723 169.3C284.025 165.062 290.813 167.127 291.195 172.485L292.369 188.919C292.978 197.448 284.845 203.936 276.664 201.448C268.485 198.959 265.343 189.041 270.597 182.297L280.723 169.3Z"
           fill="url(#paint8_linear_2_220)"
           stroke="url(#paint9_linear_2_220)"
           strokeWidth={2}
+          animatedProps={createDropAnimatedProps(drop3, 0, 30)}
         />
       </G>
       <G filter="url(#filter3_dd_2_220)">
-        <Path
+        <AnimatedPath
           d="M180.882 214.82C184.184 210.583 190.971 212.647 191.354 218.006L192.528 234.439C193.137 242.968 185.003 249.456 176.823 246.968C168.644 244.48 165.502 234.562 170.756 227.817L180.882 214.82Z"
           fill="url(#paint10_linear_2_220)"
           stroke="url(#paint11_linear_2_220)"
           strokeWidth={2}
+          animatedProps={createDropAnimatedProps(drop4, 0, 30)}
         />
-        <Path
+        <AnimatedPath
           d="M229.469 214.82C232.771 210.583 239.558 212.647 239.941 218.006L241.115 234.439C241.724 242.968 233.59 249.456 225.41 246.968C217.23 244.48 214.088 234.562 219.343 227.817L229.469 214.82Z"
           fill="url(#paint12_linear_2_220)"
           stroke="url(#paint13_linear_2_220)"
           strokeWidth={2}
+          animatedProps={createDropAnimatedProps(drop2, 0, 30)}
         />
       </G>
       <Defs>

@@ -35,7 +35,7 @@ export interface WeatherResponse {
 }
 
 
-const WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=59.9139&longitude=10.7522&current=temperature_2m,weathercode,windspeed_10m,winddirection_10m,relativehumidity_2m,precipitation,pressure_msl,visibility,uv_index,cloudcover,dewpoint_2m,apparent_temperature';
+const WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=52.5244&longitude=13.4105&current=temperature_2m,weathercode,windspeed_10m,winddirection_10m,relativehumidity_2m,precipitation,pressure_msl,visibility,uv_index,cloudcover,dewpoint_2m,apparent_temperature';
 
 export const fetchWeatherData = async (): Promise<WeatherData> => {
   try {
