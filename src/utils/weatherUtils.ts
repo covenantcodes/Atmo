@@ -6,7 +6,7 @@ export interface WeatherGradientColors {
 
 
 export const getBackgroundColors = (weatherCode: number, colorScheme?: 'light' | 'dark' | null): WeatherGradientColors => {
-  // Import colors similar to splash screen
+  
   const primaryColor = '#22A37C';
   const secondaryColor = '#1a785aff';
   const deepBlue = '#4867bbff';
