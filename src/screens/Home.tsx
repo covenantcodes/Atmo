@@ -133,26 +133,6 @@ const HomeScreen: React.FC = () => {
         end: { x: 1, y: 1 },
       };
 
-  if (loading && !weatherData) {
-    return (
-      <LinearGradient
-        colors={backgroundColors.colors}
-        start={backgroundColors.start}
-        end={backgroundColors.end}
-        style={styles.container}
-      >
-        <SafeAreaView style={styles.loadingContainer}>
-          <Animated.View style={[styles.loadingContent, animatedIconStyle]}>
-            <ActivityIndicator size="large" color={colors.white} />
-          </Animated.View>
-          <Text style={[styles.loadingText, { color: colors.white }]}>
-            Loading weather data...
-          </Text>
-        </SafeAreaView>
-      </LinearGradient>
-    );
-  }
-
   if (error && !weatherData) {
     return (
       <LinearGradient
