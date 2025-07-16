@@ -1,12 +1,15 @@
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, useColorScheme } from "react-native";
 import { useFonts } from "expo-font";
 import { FONTFAMILY } from "./utils/fonts";
 import { getColors } from "./utils/colors";
+import SplashScreen from "./components/SplashScreen";
 
 const App = () => {
   const colorScheme = useColorScheme();
   const colors = getColors(colorScheme);
+  const [showSplash, setShowSplash] = useState(true);
 
   const [fontsLoaded] = useFonts({
     JostThin: require("./assets/fonts/Jost-Thin.ttf"),
@@ -26,6 +29,10 @@ const App = () => {
     return null;
   }
 
+  if (showSplash) {
+    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+  }
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -43,7 +50,7 @@ const App = () => {
           color: colors.black,
         }}
       >
-        Open up App.tsx to start working on your app!
+        Welcome to Atmo!
       </Text>
       <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
     </View>
