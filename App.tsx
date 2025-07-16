@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, useColorScheme } from "react-native";
 import { useFonts } from "expo-font";
 import { FONTFAMILY } from "./utils/fonts";
 import { getColors } from "./utils/colors";
-import SplashScreen from "./components/SplashScreen";
+import SplashScreenComponent from "./components/SplashScreen";
 
 const App = () => {
   const colorScheme = useColorScheme();
@@ -30,7 +30,7 @@ const App = () => {
   }
 
   if (showSplash) {
-    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+    return <SplashScreenComponent onFinish={() => setShowSplash(false)} />;
   }
 
   const styles = StyleSheet.create({

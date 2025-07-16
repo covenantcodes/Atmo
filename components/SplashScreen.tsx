@@ -19,7 +19,7 @@ interface SplashScreenProps {
   onFinish: () => void;
 }
 
-const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
+const SplashScreenComponent: React.FC<SplashScreenProps> = ({ onFinish }) => {
   const colorScheme = useColorScheme();
   const colors = getColors(colorScheme);
 
@@ -141,4 +141,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SplashScreen;
+export default SplashScreenComponent;
