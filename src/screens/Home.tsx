@@ -22,6 +22,10 @@ import Animated, {
 import {
   fetchWeatherData,
   getWeatherCondition,
+  getWindDirection,
+  getUVIndexLevel,
+  getVisibilityLevel,
+  getPressureLevel,
   WeatherData,
 } from "../services/weatherService";
 import { getBackgroundColors } from "../utils/weatherUtils";
@@ -118,7 +122,7 @@ const HomeScreen: React.FC = () => {
   });
 
   const backgroundColors = weatherData
-    ? getBackgroundColors(weatherData.weatherCode)
+    ? getBackgroundColors(weatherData.weatherCode, colorScheme)
     : {
         colors: [
           colors.primaryColor,
@@ -245,37 +249,133 @@ const HomeScreen: React.FC = () => {
             <Animated.View
               style={[styles.detailsContainer, animatedSlideStyle]}
             >
-              <View
-                style={[
-                  styles.detailCard,
-                  { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-                ]}
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.detailsScrollContent}
+                style={styles.detailsScrollView}
               >
-                <Text style={[styles.detailLabel, { color: colors.white }]}>
-                  Wind Speed
-                </Text>
-                <AnimatedCounter
-                  value={weatherData ? weatherData.windSpeed : 0}
-                  suffix=" km/h"
-                  duration={1000}
-                  decimals={1}
-                  style={[styles.detailValue, { color: colors.white }]}
-                />
-              </View>
+                <View
+                  style={[
+                    styles.detailCard,
+                    { backgroundColor: "rgba(255, 255, 255, 0.2)" },
+                  ]}
+                >
+                  <Text style={[styles.detailLabel, { color: colors.white }]}>
+                    Wind
+                  </Text>
+                  <AnimatedCounter
+                    value={weatherData ? weatherData.windSpeed : 0}
+                    suffix=" km/h"
+                    duration={1000}
+                    decimals={1}
+                    style={[styles.detailValue, { color: colors.white }]}
+                  />
+                  <Text style={[styles.detailSubtext, { color: colors.white }]}>
+                    {weatherData
+                      ? getWindDirection(weatherData.windDirection)
+                      : "--"}
+                  </Text>
+                </View>
 
-              <View
-                style={[
-                  styles.detailCard,
-                  { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-                ]}
-              >
-                <Text style={[styles.detailLabel, { color: colors.white }]}>
-                  Weather Code
-                </Text>
-                <Text style={[styles.detailValue, { color: colors.white }]}>
-                  {weatherData ? weatherData.weatherCode : "--"}
-                </Text>
-              </View>
+                <View
+                  style={[
+                    styles.detailCard,
+                    { backgroundColor: "rgba(255, 255, 255, 0.2)" },
+                  ]}
+                >
+                  <Text style={[styles.detailLabel, { color: colors.white }]}>
+                    Humidity
+                  </Text>
+                  <AnimatedCounter
+                    value={weatherData ? weatherData.humidity : 0}
+                    suffix="%"
+                    duration={1000}
+                    decimals={0}
+                    style={[styles.detailValue, { color: colors.white }]}
+                  />
+                </View>
+
+                <View
+                  style={[
+                    styles.detailCard,
+                    { backgroundColor: "rgba(255, 255, 255, 0.2)" },
+                  ]}
+                >
+                  <Text style={[styles.detailLabel, { color: colors.white }]}>
+                    Pressure
+                  </Text>
+                  <AnimatedCounter
+                    value={weatherData ? weatherData.pressure : 0}
+                    suffix=" hPa"
+                    duration={1000}
+                    decimals={0}
+                    style={[styles.detailValue, { color: colors.white }]}
+                  />
+                  <Text style={[styles.detailSubtext, { color: colors.white }]}>
+                    {weatherData
+                      ? getPressureLevel(weatherData.pressure)
+                      : "--"}
+                  </Text>
+                </View>
+
+                <View
+                  style={[
+                    styles.detailCard,
+                    { backgroundColor: "rgba(255, 255, 255, 0.2)" },
+                  ]}
+                >
+                  <Text style={[styles.detailLabel, { color: colors.white }]}>
+                    UV Index
+                  </Text>
+                  <AnimatedCounter
+                    value={weatherData ? weatherData.uvIndex : 0}
+                    suffix=""
+                    duration={1000}
+                    decimals={0}
+                    style={[styles.detailValue, { color: colors.white }]}
+                  />
+                  <Text style={[styles.detailSubtext, { color: colors.white }]}>
+                    {weatherData ? getUVIndexLevel(weatherData.uvIndex) : "--"}
+                  </Text>
+                </View>
+
+                <View
+                  style={[
+                    styles.detailCard,
+                    { backgroundColor: "rgba(255, 255, 255, 0.2)" },
+                  ]}
+                >
+                  <Text style={[styles.detailLabel, { color: colors.white }]}>
+                    Visibility
+                  </Text>
+                  <AnimatedCounter
+                    value={weatherData ? weatherData.visibility / 1000 : 0}
+                    suffix=" km"
+                    duration={1000}
+                    decimals={1}
+                    style={[styles.detailValue, { color: colors.white }]}
+                  />
+                </View>
+
+                <View
+                  style={[
+                    styles.detailCard,
+                    { backgroundColor: "rgba(255, 255, 255, 0.2)" },
+                  ]}
+                >
+                  <Text style={[styles.detailLabel, { color: colors.white }]}>
+                    Feels Like
+                  </Text>
+                  <AnimatedCounter
+                    value={weatherData ? weatherData.apparentTemperature : 0}
+                    suffix="°C"
+                    duration={1000}
+                    decimals={0}
+                    style={[styles.detailValue, { color: colors.white }]}
+                  />
+                </View>
+              </ScrollView>
             </Animated.View>
           </Animated.View>
         </ScrollView>
@@ -374,14 +474,27 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
-    maxWidth: 300,
+    maxWidth: 800,
+  },
+  detailsScrollView: {
+    width: "100%",
+  },
+  detailsScrollContent: {
+    paddingHorizontal: 10,
+  },
+  detailsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    width: "100%",
   },
   detailCard: {
-    flex: 1,
+    width: 160,
     padding: 20,
-    marginHorizontal: 5,
+    marginHorizontal: 8,
     borderRadius: 15,
     alignItems: "center",
+    marginBottom: 10,
   },
   detailLabel: {
     fontFamily: FONTFAMILY.regular,
@@ -392,6 +505,12 @@ const styles = StyleSheet.create({
   detailValue: {
     fontFamily: FONTFAMILY.semibold,
     fontSize: FONTSIZE.lg,
+  },
+  detailSubtext: {
+    fontFamily: FONTFAMILY.regular,
+    fontSize: FONTSIZE.xs,
+    marginTop: 4,
+    opacity: 0.7,
   },
 });
 

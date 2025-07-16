@@ -1,6 +1,6 @@
 const lightColors = {
   primaryColor: '#22A37C',
-  secondaryColor: '#0D3D2E',
+  secondaryColor: '#1a785aff',
   primaryBg: "#E2FFF6",
   white: '#ffffff',
   background: '#FAFAFA',
@@ -18,9 +18,9 @@ const lightColors = {
 
 const darkColors = {
   primaryColor: '#22A37C',
-  secondaryColor: '#0D3D2E',
+  secondaryColor: '#1b644dff',
   primaryBg: "#1A2E25",
-  white: '#000000',
+  white: '#fff',
   background: '#121212',
   black: '#ffffff',
   red: '#FF6B6B',
@@ -30,7 +30,7 @@ const darkColors = {
   gray4: '#9CA3AF',
   gray5: '#374151',
   blue: '#60A5FA',
-  deepBlue:'#1E3A8A',
+  deepBlue:'#4867bbff',
   orange: '#F59E0B'
 };
 

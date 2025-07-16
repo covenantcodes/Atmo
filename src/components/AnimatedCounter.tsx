@@ -28,39 +28,40 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
 
   useEffect(() => {
     console.log("📊 AnimatedCounter received value:", value);
-    animatedValue.value = withTiming(value, { duration });
+    if (value !== undefined && value !== null) {
+      animatedValue.value = withTiming(value, { duration });
+    }
   }, [value, duration]);
 
-  // Use useDerivedValue for better performance and reliability
   const text = useDerivedValue(() => {
+    const currentValue = animatedValue.value;
     const displayValue =
       decimals > 0
-        ? animatedValue.value.toFixed(decimals)
-        : Math.round(animatedValue.value).toString();
+        ? currentValue.toFixed(decimals)
+        : Math.round(currentValue).toString();
 
-    const result = `${displayValue}${suffix}`;
-    console.log("🔢 AnimatedCounter text value:", result);
-    return result;
-  });
+    return `${displayValue}${suffix}`;
+  }, [decimals, suffix]);
 
   const animatedProps = useAnimatedProps(() => {
     return {
       text: text.value,
-      defaultValue: text.value,
     } as any;
   });
 
-  // Flatten the style array to a single TextStyle object
   const flattenedStyle = StyleSheet.flatten(style);
+
+  // Fallback display value
+  const fallbackValue =
+    value !== undefined && value !== null
+      ? (decimals > 0
+          ? value.toFixed(decimals)
+          : Math.round(value).toString()) + suffix
+      : "0" + suffix;
 
   return (
     <AnimatedText style={flattenedStyle} animatedProps={animatedProps}>
-      {/* Fallback text for initial render */}
-      {value
-        ? (decimals > 0
-            ? value.toFixed(decimals)
-            : Math.round(value).toString()) + suffix
-        : "0" + suffix}
+      {fallbackValue}
     </AnimatedText>
   );
 };
