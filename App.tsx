@@ -1,8 +1,13 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, useColorScheme } from "react-native";
 import { useFonts } from "expo-font";
+import { FONTFAMILY } from "./utils/fonts";
+import { getColors } from "./utils/colors";
 
 const App = () => {
+  const colorScheme = useColorScheme();
+  const colors = getColors(colorScheme);
+
   const [fontsLoaded] = useFonts({
     JostThin: require("./assets/fonts/Jost-Thin.ttf"),
     JostThinItalic: require("./assets/fonts/Jost-ThinItalic.ttf"),
@@ -21,21 +26,28 @@ const App = () => {
     return null;
   }
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <Text
+        style={{
+          fontFamily: FONTFAMILY.medium,
+          color: colors.black,
+        }}
+      >
+        Open up App.tsx to start working on your app!
+      </Text>
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
 
 export default App;
