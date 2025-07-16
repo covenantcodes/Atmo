@@ -44,19 +44,19 @@ const SunnyIcon = ({ size = 80, ...props }: SunnyIconProps) => {
     ) => {
       rayValue.value = withDelay(
         delay,
-        withRepeat(withTiming(1, { duration: 2000 }), -1, true)
+        withRepeat(withTiming(1, { duration: 2200 }), -1, true)
       );
     };
 
     // Stagger the animations for each ray
-    animateRay(ray1Progress, 0);
-    animateRay(ray2Progress, 150);
-    animateRay(ray3Progress, 300);
-    animateRay(ray4Progress, 450);
-    animateRay(ray5Progress, 600);
-    animateRay(ray6Progress, 750);
-    animateRay(ray7Progress, 900);
-    animateRay(ray8Progress, 1050);
+    animateRay(ray1Progress, 0); // 12 o'clock
+    animateRay(ray2Progress, 200); // 1:30
+    animateRay(ray3Progress, 400); // 3
+    animateRay(ray4Progress, 600); // 4:30
+    animateRay(ray5Progress, 200); // 6
+    animateRay(ray6Progress, 400); // 7:30
+    animateRay(ray7Progress, 600); // 9
+    animateRay(ray8Progress, 800); // 10:30
   }, []);
 
   const createRayAnimatedProps = (progress: Animated.SharedValue<number>) => {

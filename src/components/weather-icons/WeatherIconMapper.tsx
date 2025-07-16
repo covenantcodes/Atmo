@@ -78,7 +78,7 @@ const WeatherIconMapper: React.FC<WeatherIconMapperProps> = ({
 
   // Sunny conditions (0-3)
   if (weatherCode >= 0 && weatherCode <= 3) {
-    return <SunnyIcon size={200} color={colors.primary} />;
+    return <RainyIcon size={200} color={colors.primary} />;
   }
 
   // Rain conditions (51-67, 80-82)
