@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import Svg, { Path, Circle } from 'react-native-svg';
+import React, { useEffect } from "react";
+import Svg, { Path, Circle } from "react-native-svg";
 import Animated, {
   useSharedValue,
   useAnimatedProps,
   withTiming,
   withDelay,
   Easing,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -16,25 +16,26 @@ interface AtmoLogoProps {
   color?: string;
 }
 
-const AtmoLogo: React.FC<AtmoLogoProps> = ({ size = 100, color = '#22A37C' }) => {
+const AtmoLogo: React.FC<AtmoLogoProps> = ({
+  size = 100,
+  color = "#22A37C",
+}) => {
   const pathProgress = useSharedValue(0);
   const circleProgress = useSharedValue(0);
 
   useEffect(() => {
-    // Animate the path drawing
     pathProgress.value = withDelay(
-      200,
+      300,
       withTiming(1, {
-        duration: 1500,
+        duration: 2500,
         easing: Easing.out(Easing.cubic),
       })
     );
 
-    // Animate the circle
     circleProgress.value = withDelay(
-      800,
+      1200,
       withTiming(1, {
-        duration: 800,
+        duration: 1200,
         easing: Easing.out(Easing.cubic),
       })
     );
@@ -65,7 +66,7 @@ const AtmoLogo: React.FC<AtmoLogoProps> = ({ size = 100, color = '#22A37C' }) =>
         strokeDasharray="200"
         animatedProps={animatedPathProps}
       />
-      
+
       {/* Letter T */}
       <AnimatedPath
         d="M45 50 L55 50 M50 50 L50 80"
@@ -77,7 +78,7 @@ const AtmoLogo: React.FC<AtmoLogoProps> = ({ size = 100, color = '#22A37C' }) =>
         strokeDasharray="200"
         animatedProps={animatedPathProps}
       />
-      
+
       {/* Letter M */}
       <AnimatedPath
         d="M60 80 L60 50 L70 65 L80 50 L80 80"
@@ -89,7 +90,7 @@ const AtmoLogo: React.FC<AtmoLogoProps> = ({ size = 100, color = '#22A37C' }) =>
         strokeDasharray="200"
         animatedProps={animatedPathProps}
       />
-      
+
       {/* Decorative circle */}
       <AnimatedCircle
         cx="50"
@@ -101,7 +102,7 @@ const AtmoLogo: React.FC<AtmoLogoProps> = ({ size = 100, color = '#22A37C' }) =>
         strokeDasharray="60"
         animatedProps={animatedCircleProps}
       />
-      
+
       {/* Letter O in circle */}
       <AnimatedPath
         d="M45 30 A5 5 0 1 1 55 30 A5 5 0 1 1 45 30"

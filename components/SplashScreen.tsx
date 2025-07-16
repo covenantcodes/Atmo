@@ -60,7 +60,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
         containerOpacity.value = withTiming(0, { duration: 500 }, () =>
           runOnJS(onFinish)()
         );
-      }, 3000);
+      }, 4000);
     };
 
     startAnimations();
@@ -88,8 +88,12 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
 
   const gradientColors =
     colorScheme === "dark"
-      ? [colors.primaryColor, colors.secondaryColor, colors.deepBlue]
-      : [colors.primaryBg, colors.primaryColor, colors.secondaryColor];
+      ? ([colors.primaryColor, colors.secondaryColor, colors.deepBlue] as const)
+      : ([
+          colors.primaryBg,
+          colors.primaryColor,
+          colors.secondaryColor,
+        ] as const);
 
   return (
     <Animated.View style={[styles.container, containerAnimatedStyle]}>
