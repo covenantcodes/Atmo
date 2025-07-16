@@ -27,6 +27,12 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4952a859-8e88-49d2-9fcf-73ba75232f9f"
+      }
+    },
+    "owner": "covenantcodes"
   }
 }
