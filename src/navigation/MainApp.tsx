@@ -6,6 +6,11 @@ import WeatherDetailsScreen from "../screens/WeatherDetails";
 
 const Stack = createNativeStackNavigator();
 
+export type RootStackParamList = {
+  Home: undefined;
+  WeatherDetails: undefined;
+};
+
 const MainApp: React.FC = () => {
   return (
     <NavigationContainer>

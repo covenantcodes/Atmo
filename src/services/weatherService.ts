@@ -39,14 +39,10 @@ const WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=52.5244&lon
 
 export const fetchWeatherData = async (): Promise<WeatherData> => {
   try {
-    console.log('🌤️ Fetching enhanced weather data from:', WEATHER_URL);
-    
+
     const response = await axios.get<WeatherResponse>(WEATHER_URL, {
       timeout: 15000, // Increased timeout for more data
-    });
-
-    console.log('📡 Raw API Response:', JSON.stringify(response.data, null, 2));
-    
+    });    
     const { current } = response.data;
     
     const weatherData: WeatherData = {
@@ -64,9 +60,6 @@ export const fetchWeatherData = async (): Promise<WeatherData> => {
       apparentTemperature: current.apparent_temperature,
       timestamp: current.time,
     };
-
-    console.log('✅ Enhanced weather data:', weatherData);
-    
     return weatherData;
   } catch (error) {
     console.error('❌ Weather API Error:', error);
@@ -149,7 +142,7 @@ export const getWeatherCondition = (weatherCode: number): string => {
   };
 
   const condition = weatherConditions[weatherCode] || 'Unknown weather condition';
-  console.log(`🌤️ Weather condition for code ${weatherCode}:`, condition);
+  
   
   return condition;
 };

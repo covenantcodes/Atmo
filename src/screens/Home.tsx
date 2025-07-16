@@ -34,10 +34,17 @@ import { getColors } from "../utils/colors";
 import { FONTFAMILY, FONTSIZE } from "../utils/fonts";
 import WeatherIconMapper from "../components/weather-icons/WeatherIconMapper";
 import AnimatedCounter from "../components/AnimatedCounter";
+import { RootStackParamList } from "../navigation/MainApp";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+type HomeScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Home"
+>;
 
 const HomeScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<HomeScreenNavigationProp>();
   const [colorScheme, setColorScheme] = useState<"light" | "dark">("light");
 
   const toggleColorScheme = () => {

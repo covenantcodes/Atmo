@@ -76,14 +76,7 @@ const WeatherDetailScreen: React.FC<WeatherDetailScreenProps> = ({
     { key: "forecast", title: "Forecast" },
   ]);
 
-  // Update time every second
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
 
-    return () => clearInterval(timer);
-  }, []);
 
   // Update color scheme based on system
   useEffect(() => {
@@ -302,24 +295,6 @@ const WeatherDetailScreen: React.FC<WeatherDetailScreenProps> = ({
           <Text style={[styles.windSpeed, { color: colors.white }]}>
             {weatherData ? weatherData.windSpeed.toFixed(1) : 0} km/h
           </Text>
-        </View>
-
-        {/* UTC Time */}
-        <View style={styles.timeSection}>
-          <LinearGradient
-            colors={["rgba(255, 255, 255, 0.2)", "rgba(255, 255, 255, 0.1)"]}
-            style={styles.timeCard}
-          >
-            <Text style={[styles.timeLabel, { color: colors.white }]}>
-              Current UTC Time
-            </Text>
-            <Text style={[styles.utcTime, { color: colors.white }]}>
-              {formatUTCTime(currentTime)}
-            </Text>
-            <Text style={[styles.localTime, { color: colors.white }]}>
-              Local: {currentTime.toLocaleTimeString()}
-            </Text>
-          </LinearGradient>
         </View>
       </Animated.View>
     </ScrollView>

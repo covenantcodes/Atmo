@@ -27,7 +27,7 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   const animatedValue = useSharedValue(0);
 
   useEffect(() => {
-    console.log("📊 AnimatedCounter received value:", value);
+    // console.log("📊 AnimatedCounter received value:", value);
     if (value !== undefined && value !== null) {
       animatedValue.value = withTiming(value, { duration });
     }
