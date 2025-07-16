@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, useColorScheme } from "react-native";
+import { useColorScheme } from "react-native";
 import { useFonts } from "expo-font";
-import { FONTFAMILY } from "./utils/fonts";
-import { getColors } from "./utils/colors";
-import SplashScreenComponent from "./components/SplashScreen";
+import { getColors } from "./src/utils/colors";
+import SplashScreenComponent from "./src/components/SplashScreen";
 import * as SplashScreen from "expo-splash-screen";
-import MainApp from "./navigation/MainApp";
+import MainApp from "./src/navigation/MainApp";
 
 const App = () => {
   const colorScheme = useColorScheme();

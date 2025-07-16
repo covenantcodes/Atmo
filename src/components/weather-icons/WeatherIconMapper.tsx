@@ -37,12 +37,24 @@ const WeatherIconMapper: React.FC<WeatherIconMapperProps> = ({
     (weatherCode >= 71 && weatherCode <= 77) ||
     (weatherCode >= 85 && weatherCode <= 86)
   ) {
-    return <RainyIcon size={size} cloudColor="#E6E6FA" rainColor="#FFFFFF" />;
+    return (
+      <RainyIcon
+        size={size}
+        cloudColor="#E6E6FA"
+        rainColor="#FFFFFF"
+      />
+    );
   }
 
   // Thunderstorm conditions
   if (weatherCode >= 95 && weatherCode <= 99) {
-    return <RainyIcon size={size} cloudColor="#2C2C54" rainColor="#FFD700" />;
+    return (
+      <RainyIcon
+        size={size}
+        cloudColor="#2C2C54"
+        rainColor="#FFD700"
+      />
+    );
   }
 
   // Default to sunny for unknown conditions
