@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, useColorScheme } from "react-native";
 import { useFonts } from "expo-font";
 import { FONTFAMILY } from "./utils/fonts";
 import { getColors } from "./utils/colors";
 import SplashScreenComponent from "./components/SplashScreen";
+import * as SplashScreen from "expo-splash-screen";
+import MainApp from "./navigation/MainApp";
 
 const App = () => {
   const colorScheme = useColorScheme();
   const colors = getColors(colorScheme);
-  const [showSplash, setShowSplash] = useState(true);
+  const [showCustomSplash, setShowCustomSplash] = useState(true);
+  const [isAppReady, setIsAppReady] = useState(false);
 
   const [fontsLoaded] = useFonts({
     JostThin: require("./assets/fonts/Jost-Thin.ttf"),
@@ -25,35 +28,48 @@ const App = () => {
     JostExtraBoldItalic: require("./assets/fonts/Jost-ExtraBoldItalic.ttf"),
   });
 
-  if (!fontsLoaded) {
+  useEffect(() => {
+    SplashScreen.preventAutoHideAsync();
+
+    const prepare = async () => {
+      try {
+        if (fontsLoaded) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          await SplashScreen.hideAsync();
+          setIsAppReady(true);
+        }
+      } catch (e) {
+        console.warn(e);
+        await SplashScreen.hideAsync();
+        setIsAppReady(true);
+      }
+    };
+
+    prepare();
+  }, [fontsLoaded]);
+
+  const handleCustomSplashFinish = () => {
+    setShowCustomSplash(false);
+  };
+
+  if (!fontsLoaded || !isAppReady) {
     return null;
   }
 
-  if (showSplash) {
-    return <SplashScreenComponent onFinish={() => setShowSplash(false)} />;
+  if (showCustomSplash) {
+    return (
+      <>
+        <StatusBar style="light" />
+        <SplashScreenComponent onFinish={handleCustomSplashFinish} />
+      </>
+    );
   }
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-  });
-
   return (
-    <View style={styles.container}>
-      <Text
-        style={{
-          fontFamily: FONTFAMILY.medium,
-          color: colors.black,
-        }}
-      >
-        Welcome to Atmo!
-      </Text>
+    <>
       <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
-    </View>
+      <MainApp />
+    </>
   );
 };
 
