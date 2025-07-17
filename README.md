@@ -2,6 +2,18 @@
 
 **Atmo** is a modern, animated weather app built with React Native. It provides real-time weather data, hourly forecasts, and detailed weather insights with a beautiful, interactive UI.
 
+---
+
+## 📺 Demo
+
+[![Watch the demo on YouTube](https://img.shields.io/badge/Watch%20Demo-YouTube-red?logo=youtube)](https://youtube.com/shorts/Fh3BLxyMtEs?si=vSgidVGThcoKOc93)
+
+<p align="center">
+  <img src="./assets/AtmoDemoVideo.gif" alt="Atmo Demo" width="320"/>
+</p>
+
+---
+
 ## Features
 
 - 🌤️ **Current Weather:** See up-to-date weather conditions for Berlin, Germany (default).
@@ -164,4 +176,4 @@ MIT
 
 ---
 
-Made with ❤️ using React Native.
+Made with ❤️ by covenantcodes using React Native Expo.
