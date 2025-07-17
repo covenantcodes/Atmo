@@ -298,8 +298,27 @@ const HomeScreen: React.FC = () => {
             </Animated.View>
           </Animated.View>
         </ScrollView>
-        <TouchableOpacity onPress={() => navigation.navigate("WeatherDetails")}>
-          <Text>Navigatttteee</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("WeatherDetails")}
+          style={{
+            alignSelf: "center",
+            marginTop: 24,
+            backgroundColor: "rgba(255,255,255,0.15)",
+            borderRadius: 20,
+            paddingVertical: 12,
+            paddingHorizontal: 32,
+          }}
+        >
+          <Text
+            style={{
+              color: colors.white,
+              fontFamily: FONTFAMILY.semibold,
+              fontSize: FONTSIZE.md,
+              letterSpacing: 1,
+            }}
+          >
+            See More
+          </Text>
         </TouchableOpacity>
       </SafeAreaView>
     </LinearGradient>
@@ -313,6 +332,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     paddingHorizontal: 10,
+    paddingBottom: 30,
   },
   timerContainer: {
     position: "absolute",
