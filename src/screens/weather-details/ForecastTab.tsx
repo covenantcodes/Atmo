@@ -50,15 +50,17 @@ const ForecastTab: React.FC<ForecastTabProps> = ({
             ]}
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <WeatherIconMapper
-                weatherCode={item.weatherCode}
-                windSpeed={item.windSpeed}
-                size={40}
-                iconColor={colors.white}
-              />
-              <View style={{ marginLeft: 16 }}>
+              <View>
                 <Text style={{ color: colors.white, fontWeight: "bold" }}>
-                  {item.time ? new Date(item.time).toLocaleString() : "—"}
+                  {item.time
+                    ? new Date(item.time).toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      })
+                    : "—"}
                 </Text>
                 <Text style={{ color: colors.white }}>
                   {item.summary || ""}

@@ -1,5 +1,14 @@
 import axios from 'axios';
 
+export interface ForecastItem {
+  time: string;
+  temperature: number;
+  weatherCode: number;
+  windSpeed: number;
+  summary?: string;
+}
+
+
 export interface WeatherData {
   temperature: number;
   weatherCode: number;
@@ -14,6 +23,7 @@ export interface WeatherData {
   dewPoint: number;
   apparentTemperature: number;
   timestamp: string;
+  forecast?: ForecastItem[];
 }
 
 export interface WeatherResponse {
@@ -32,19 +42,37 @@ export interface WeatherResponse {
     apparent_temperature: number;
     time: string;
   };
+  hourly?: {
+    time: string[];
+    temperature_2m: number[];
+    weathercode: number[];
+    windspeed_10m: number[];
+  };
 }
 
 
-const WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=52.5244&longitude=13.4105&current=temperature_2m,weathercode,windspeed_10m,winddirection_10m,relativehumidity_2m,precipitation,pressure_msl,visibility,uv_index,cloudcover,dewpoint_2m,apparent_temperature';
+
+const WEATHER_URL = 'https://api.open-meteo.com/v1/forecast?latitude=52.5244&longitude=13.4105&current=temperature_2m,weathercode,windspeed_10m,winddirection_10m,relativehumidity_2m,precipitation,pressure_msl,visibility,uv_index,cloudcover,dewpoint_2m,apparent_temperature&hourly=temperature_2m,weathercode,windspeed_10m&forecast_days=2';
 
 export const fetchWeatherData = async (): Promise<WeatherData> => {
   try {
-
     const response = await axios.get<WeatherResponse>(WEATHER_URL, {
-      timeout: 15000, // Increased timeout for more data
-    });    
-    const { current } = response.data;
+      timeout: 15000,
+    });
+
+    const { current, hourly } = response.data;
+
     
+    let forecast: ForecastItem[] = [];
+    if (hourly && hourly.time && hourly.temperature_2m && hourly.weathercode && hourly.windspeed_10m) {
+      forecast = hourly.time.slice(0, 24).map((time, idx) => ({
+        time,
+        temperature: hourly.temperature_2m[idx],
+        weatherCode: hourly.weathercode[idx],
+        windSpeed: hourly.windspeed_10m[idx],
+      }));
+    }
+
     const weatherData: WeatherData = {
       temperature: current.temperature_2m,
       weatherCode: current.weathercode,
@@ -59,6 +87,7 @@ export const fetchWeatherData = async (): Promise<WeatherData> => {
       dewPoint: current.dewpoint_2m,
       apparentTemperature: current.apparent_temperature,
       timestamp: current.time,
+      forecast, 
     };
     return weatherData;
   } catch (error) {
