@@ -21,7 +21,7 @@ const WeatherIconMapper: React.FC<WeatherIconMapperProps> = ({
 
   // Wind overrides all if strong enough
   if (windSpeed > 15) {
-    return <SunnyIcon size={size} color={iconColor} />;
+    return <WindyIcon size={size} color={iconColor} />;
   }
 
   if (
