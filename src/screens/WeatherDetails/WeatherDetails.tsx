@@ -25,14 +25,14 @@ import {
   getVisibilityLevel,
   getPressureLevel,
   WeatherData,
-} from "../services/weatherService";
-import { getBackgroundColors } from "../utils/weatherUtils";
-import { getColors } from "../utils/colors";
-import { FONTFAMILY, FONTSIZE } from "../utils/fonts";
-import OverviewTab from "./weather-details/OverviewTab";
-import DetailsTab from "./weather-details/DetailsTab";
-import ForecastTab from "./weather-details/ForecastTab";
-import WindCompass from "../components/WindCompass";
+} from "../../services/weatherService";
+import { getBackgroundColors } from "../../utils/weatherUtils";
+import { getColors } from "../../utils/colors";
+import { FONTFAMILY, FONTSIZE } from "../../utils/fonts";
+import OverviewTab from "./components/OverviewTab";
+import DetailsTab from "./components/DetailsTab";
+import ForecastTab from "./components/ForecastTab";
+import WindCompass from "../../components/WindCompass";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 

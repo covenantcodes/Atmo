@@ -1,8 +1,8 @@
 import React from "react";
 import { ScrollView, View, Text } from "react-native";
 import Animated from "react-native-reanimated";
-import WeatherIconMapper from "../../components/weather-icons/WeatherIconMapper";
-import AnimatedCounter from "../../components/AnimatedCounter";
+
+import AnimatedCounter from "../../../components/AnimatedCounter";
 
 type ForecastTabProps = {
   forecastData?: Array<{

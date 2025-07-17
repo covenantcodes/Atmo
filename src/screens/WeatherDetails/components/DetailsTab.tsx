@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollView, View, Text, Switch } from "react-native";
 import Animated from "react-native-reanimated";
-import AnimatedCounter from "../../components/AnimatedCounter";
+import AnimatedCounter from "../../../components/AnimatedCounter";
 
 type DetailsTabProps = {
   weatherData: any;

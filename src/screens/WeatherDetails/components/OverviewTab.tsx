@@ -2,11 +2,11 @@ import React from "react";
 import { ScrollView, View, Text, Switch } from "react-native";
 import Animated from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
-import WeatherIconMapper from "../../components/weather-icons/WeatherIconMapper";
-import AnimatedCounter from "../../components/AnimatedCounter";
-import WindCompass from "../../components/WindCompass";
-import { getWindDirection } from "../../services/weatherService";
-import CustomSwitch from "../../components/CustomSwitch";
+import WeatherIconMapper from "../../../components/weather-icons/WeatherIconMapper";
+import AnimatedCounter from "../../../components/AnimatedCounter";
+import WindCompass from "../../../components/WindCompass";
+import { getWindDirection } from "../../../services/weatherService";
+import CustomSwitch from "../../../components/CustomSwitch";
 
 type OverviewTabProps = {
   weatherData: any;
