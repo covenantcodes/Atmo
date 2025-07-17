@@ -14,7 +14,9 @@ export type RootStackParamList = {
 const MainApp: React.FC = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{ contentStyle: { backgroundColor: "transparent" } }}
+      >
         <Stack.Screen
           name="Home"
           component={HomeScreen}

@@ -4,12 +4,9 @@ import {
   Text,
   StyleSheet,
   useColorScheme,
-  RefreshControl,
-  ScrollView,
   Alert,
   Pressable,
   Dimensions,
-  Switch,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,10 +15,6 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   withSpring,
-  useDerivedValue,
-  interpolate,
-  withRepeat,
-  cancelAnimation,
 } from "react-native-reanimated";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import {
@@ -36,8 +29,6 @@ import {
 import { getBackgroundColors } from "../utils/weatherUtils";
 import { getColors } from "../utils/colors";
 import { FONTFAMILY, FONTSIZE } from "../utils/fonts";
-import WeatherIconMapper from "../components/weather-icons/WeatherIconMapper";
-import AnimatedCounter from "../components/AnimatedCounter";
 import OverviewTab from "./weather-details/OverviewTab";
 import DetailsTab from "./weather-details/DetailsTab";
 import ForecastTab from "./weather-details/ForecastTab";

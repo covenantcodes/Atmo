@@ -225,7 +225,7 @@ const HomeScreen: React.FC = () => {
               {weatherData && (
                 <View style={styles.iconContainer}>
                   <WeatherIconMapper
-                    weatherCode={weatherData.weatherCode}
+                    conditionName={getWeatherCondition(weatherData.weatherCode)}
                     windSpeed={weatherData.windSpeed}
                     size={100}
                     iconColor={colors.white}

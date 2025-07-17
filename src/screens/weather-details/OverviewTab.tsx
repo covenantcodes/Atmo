@@ -6,6 +6,7 @@ import WeatherIconMapper from "../../components/weather-icons/WeatherIconMapper"
 import AnimatedCounter from "../../components/AnimatedCounter";
 import WindCompass from "../../components/WindCompass";
 import { getWindDirection } from "../../services/weatherService";
+import CustomSwitch from "../../components/CustomSwitch";
 
 type OverviewTabProps = {
   weatherData: any;
@@ -42,7 +43,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
           <View style={styles.currentWeatherContent}>
             {weatherData && (
               <WeatherIconMapper
-                weatherCode={weatherData.weatherCode}
+                conditionName={getWeatherCondition(weatherData.weatherCode)}
                 windSpeed={weatherData.windSpeed}
                 size={80}
                 iconColor={colors.white}
@@ -104,14 +105,15 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
         </Text>
         <View style={styles.unitToggle}>
           <Text style={[styles.unitText, { color: colors.white }]}>°C</Text>
-          <Switch
-            value={temperatureUnit === "F"}
-            onValueChange={(value) => setTemperatureUnit(value ? "F" : "C")}
-            trackColor={{
-              false: "rgba(255, 255, 255, 0.3)",
-              true: "rgba(255, 255, 255, 0.3)",
-            }}
-            thumbColor={colors.white}
+          <CustomSwitch
+            isActive={temperatureUnit === "F"}
+            onToggle={() =>
+              setTemperatureUnit(temperatureUnit === "C" ? "F" : "C")
+            }
+            activeColor={colors.primaryColor}
+            inactiveColor="rgba(255, 255, 255, 0.54)"
+            size="medium"
+            style={{ marginHorizontal: 10 }}
           />
           <Text style={[styles.unitText, { color: colors.white }]}>°F</Text>
         </View>
