@@ -38,5 +38,5 @@ export const getColors = (colorScheme: 'light' | 'dark' | null | undefined) => {
   return colorScheme === 'dark' ? darkColors : lightColors;
 };
 
-// Keep the original export for backward compatibility
+// I kept the original export for backward compatibility
 export default lightColors;

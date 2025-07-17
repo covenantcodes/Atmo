@@ -12,7 +12,7 @@ export const getBackgroundColors = (weatherCode: number, colorScheme?: 'light' |
   const deepBlue = '#4867bbff';
   const primaryBg = '#a0ffe1ff';
 
-  // Use the same logic as splash screen
+  
   if (colorScheme === 'dark') {
     return {
       colors: [primaryColor, secondaryColor, deepBlue] as const,
@@ -29,7 +29,7 @@ export const getBackgroundColors = (weatherCode: number, colorScheme?: 'light' |
 };
 
 export const getWeatherIcon = (weatherCode: number): string => {
-  // Simple emoji mapping for weather icons
+  
   if (weatherCode === 0) return '☀️';
   if (weatherCode >= 1 && weatherCode <= 3) return '⛅';
   if (weatherCode >= 45 && weatherCode <= 48) return '🌫️';

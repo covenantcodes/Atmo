@@ -7,7 +7,6 @@ interface CompassIconProps {
   color?: string;
 }
 
-// const SVGComponent = (props as CompassIconProps)  => (
 const CompassIcon = ({ size = 80, ...props }: CompassIconProps) => {
   return (
     <Svg width="30" height="30" viewBox="0 0 32 32" {...props}>
