@@ -90,7 +90,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
         getWindDirection={getWindDirection}
         colors={colors}
         styles={styles}
-        compassStyle={animatedContentStyle} // or your animated compass style
+        compassStyle={animatedContentStyle}
       />
 
       <View

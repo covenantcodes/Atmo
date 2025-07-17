@@ -26,7 +26,7 @@ interface SunnyIconProps extends SvgProps {
   size?: number;
 }
 
-const SunnyIcon = ({ size = 80, ...props }: SunnyIconProps) => {
+const SunnyIcon = ({ size = 120, ...props }: SunnyIconProps) => {
   // Animation values for each ray
   const ray1Progress = useSharedValue(0);
   const ray2Progress = useSharedValue(0);

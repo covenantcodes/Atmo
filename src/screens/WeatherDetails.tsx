@@ -175,7 +175,6 @@ const WeatherDetailScreen: React.FC<WeatherDetailScreenProps> = ({
         end: { x: 1, y: 1 },
       };
 
-  // Wind Direction Compass Component
   <WindCompass
     windDirection={weatherData?.windDirection ?? 0}
     getWindDirection={getWindDirection}
@@ -229,7 +228,14 @@ const WeatherDetailScreen: React.FC<WeatherDetailScreenProps> = ({
       {...props}
       indicatorStyle={{ backgroundColor: colors.white, height: 3 }}
       style={{ backgroundColor: "transparent", elevation: 0 }}
-      renderLabel={({ route, focused }) => (
+      renderLabel={({
+        route,
+        focused,
+      }: {
+        route: { key: string; title: string };
+        focused: boolean;
+        color: string;
+      }) => (
         <Text
           style={{
             fontFamily: FONTFAMILY.semibold,
