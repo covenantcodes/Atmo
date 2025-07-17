@@ -1,18 +1,21 @@
 import React from "react";
-import { ScrollView, View, Text } from "react-native";
+import { ScrollView, View, Text, Switch } from "react-native";
 import Animated from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 import WeatherIconMapper from "../../components/weather-icons/WeatherIconMapper";
 import AnimatedCounter from "../../components/AnimatedCounter";
+import WindCompass from "../../components/WindCompass";
+import { getWindDirection } from "../../services/weatherService";
 
 type OverviewTabProps = {
   weatherData: any;
   colors: any;
   animatedContentStyle: any;
-  convertTemperature: (temp: number, unit: string) => number;
-  temperatureUnit: string;
+  convertTemperature: (temp: number, unit: "C" | "F") => number;
+  temperatureUnit: "C" | "F";
+  setTemperatureUnit: (unit: "C" | "F") => void;
   getWeatherCondition: (weatherCode: number) => string;
-  WindCompass: React.ComponentType;
+  getWindDirection: (deg: number) => string;
   currentTime: Date;
   formatUTCTime: (date: Date) => string;
   styles: any;
@@ -24,10 +27,8 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
   animatedContentStyle,
   convertTemperature,
   temperatureUnit,
+  setTemperatureUnit,
   getWeatherCondition,
-  WindCompass,
-  currentTime,
-  formatUTCTime,
   styles,
 }) => (
   <ScrollView style={styles.tabContent}>
@@ -84,33 +85,36 @@ const OverviewTab: React.FC<OverviewTabProps> = ({
         </LinearGradient>
       </View>
 
-      {/* Wind Direction */}
-      <View style={styles.windSection}>
-        <Text style={[styles.sectionTitle, { color: colors.white }]}>
-          Wind Direction
-        </Text>
-        <WindCompass />
-        <Text style={[styles.windSpeed, { color: colors.white }]}>
-          {weatherData ? weatherData.windSpeed.toFixed(1) : 0} km/h
-        </Text>
-      </View>
+      <WindCompass
+        windDirection={weatherData?.windDirection ?? 0}
+        getWindDirection={getWindDirection}
+        colors={colors}
+        styles={styles}
+        compassStyle={animatedContentStyle} // or your animated compass style
+      />
 
-      {/* UTC Time */}
-      <View style={styles.timeSection}>
-        <LinearGradient
-          colors={["rgba(255, 255, 255, 0.2)", "rgba(255, 255, 255, 0.1)"]}
-          style={styles.timeCard}
-        >
-          <Text style={[styles.timeLabel, { color: colors.white }]}>
-            Current UTC Time
-          </Text>
-          <Text style={[styles.utcTime, { color: colors.white }]}>
-            {formatUTCTime(currentTime)}
-          </Text>
-          <Text style={[styles.localTime, { color: colors.white }]}>
-            Local: {currentTime.toLocaleTimeString()}
-          </Text>
-        </LinearGradient>
+      <View
+        style={[
+          styles.settingsCard,
+          { backgroundColor: "rgba(255, 255, 255, 0.2)" },
+        ]}
+      >
+        <Text style={[styles.settingsLabel, { color: colors.white }]}>
+          Temperature Unit
+        </Text>
+        <View style={styles.unitToggle}>
+          <Text style={[styles.unitText, { color: colors.white }]}>°C</Text>
+          <Switch
+            value={temperatureUnit === "F"}
+            onValueChange={(value) => setTemperatureUnit(value ? "F" : "C")}
+            trackColor={{
+              false: "rgba(255, 255, 255, 0.3)",
+              true: "rgba(255, 255, 255, 0.3)",
+            }}
+            thumbColor={colors.white}
+          />
+          <Text style={[styles.unitText, { color: colors.white }]}>°F</Text>
+        </View>
       </View>
     </Animated.View>
   </ScrollView>

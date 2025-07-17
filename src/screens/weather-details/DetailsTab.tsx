@@ -8,7 +8,6 @@ type DetailsTabProps = {
   colors: { white: string };
   animatedSlideStyle: any;
   temperatureUnit: "C" | "F";
-  setTemperatureUnit: (unit: "C" | "F") => void;
   getPressureLevel: (pressure: number) => string;
   getUVIndexLevel: (uvIndex: number) => string;
   getVisibilityLevel: (visibility: number) => string;
@@ -20,7 +19,6 @@ const DetailsTab = ({
   colors,
   animatedSlideStyle,
   temperatureUnit,
-  setTemperatureUnit,
   getPressureLevel,
   getUVIndexLevel,
   getVisibilityLevel,
@@ -109,31 +107,6 @@ const DetailsTab = ({
           <Text style={[styles.detailSubtext, { color: colors.white }]}>
             {weatherData ? getVisibilityLevel(weatherData.visibility) : "--"}
           </Text>
-        </View>
-      </View>
-
-      {/* Temperature Unit Toggle */}
-      <View
-        style={[
-          styles.settingsCard,
-          { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-        ]}
-      >
-        <Text style={[styles.settingsLabel, { color: colors.white }]}>
-          Temperature Unit
-        </Text>
-        <View style={styles.unitToggle}>
-          <Text style={[styles.unitText, { color: colors.white }]}>°C</Text>
-          <Switch
-            value={temperatureUnit === "F"}
-            onValueChange={(value) => setTemperatureUnit(value ? "F" : "C")}
-            trackColor={{
-              false: "rgba(255, 255, 255, 0.3)",
-              true: "rgba(255, 255, 255, 0.3)",
-            }}
-            thumbColor={colors.white}
-          />
-          <Text style={[styles.unitText, { color: colors.white }]}>°F</Text>
         </View>
       </View>
     </Animated.View>

@@ -9,6 +9,7 @@ import {
   Alert,
   Pressable,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -177,6 +178,54 @@ const HomeScreen: React.FC = () => {
     );
   }
 
+  const weatherDetails = [
+    {
+      key: "wind",
+      label: "Wind",
+      value: weatherData ? weatherData.windSpeed : 0,
+      suffix: " km/h",
+      subtext: weatherData ? getWindDirection(weatherData.windDirection) : "--",
+      decimals: 1,
+    },
+    {
+      key: "humidity",
+      label: "Humidity",
+      value: weatherData ? weatherData.humidity : 0,
+      suffix: "%",
+      decimals: 0,
+    },
+    {
+      key: "pressure",
+      label: "Pressure",
+      value: weatherData ? weatherData.pressure : 0,
+      suffix: " hPa",
+      subtext: weatherData ? getPressureLevel(weatherData.pressure) : "--",
+      decimals: 0,
+    },
+    {
+      key: "uv",
+      label: "UV Index",
+      value: weatherData ? weatherData.uvIndex : 0,
+      suffix: "",
+      subtext: weatherData ? getUVIndexLevel(weatherData.uvIndex) : "--",
+      decimals: 0,
+    },
+    {
+      key: "visibility",
+      label: "Visibility",
+      value: weatherData ? weatherData.visibility / 1000 : 0,
+      suffix: " km",
+      decimals: 1,
+    },
+    {
+      key: "feelsLike",
+      label: "Feels Like",
+      value: weatherData ? weatherData.apparentTemperature : 0,
+      suffix: "°C",
+      decimals: 0,
+    },
+  ];
+
   return (
     <LinearGradient
       colors={backgroundColors.colors}
@@ -257,133 +306,40 @@ const HomeScreen: React.FC = () => {
             <Animated.View
               style={[styles.detailsContainer, animatedSlideStyle]}
             >
-              <ScrollView
+              <FlatList
+                data={weatherDetails}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.detailsScrollContent}
                 style={styles.detailsScrollView}
-              >
-                <View
-                  style={[
-                    styles.detailCard,
-                    { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-                  ]}
-                >
-                  <Text style={[styles.detailLabel, { color: colors.white }]}>
-                    Wind
-                  </Text>
-                  <AnimatedCounter
-                    value={weatherData ? weatherData.windSpeed : 0}
-                    suffix=" km/h"
-                    duration={1000}
-                    decimals={1}
-                    style={[styles.detailValue, { color: colors.white }]}
-                  />
-                  <Text style={[styles.detailSubtext, { color: colors.white }]}>
-                    {weatherData
-                      ? getWindDirection(weatherData.windDirection)
-                      : "--"}
-                  </Text>
-                </View>
-
-                <View
-                  style={[
-                    styles.detailCard,
-                    { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-                  ]}
-                >
-                  <Text style={[styles.detailLabel, { color: colors.white }]}>
-                    Humidity
-                  </Text>
-                  <AnimatedCounter
-                    value={weatherData ? weatherData.humidity : 0}
-                    suffix="%"
-                    duration={1000}
-                    decimals={0}
-                    style={[styles.detailValue, { color: colors.white }]}
-                  />
-                </View>
-
-                <View
-                  style={[
-                    styles.detailCard,
-                    { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-                  ]}
-                >
-                  <Text style={[styles.detailLabel, { color: colors.white }]}>
-                    Pressure
-                  </Text>
-                  <AnimatedCounter
-                    value={weatherData ? weatherData.pressure : 0}
-                    suffix=" hPa"
-                    duration={1000}
-                    decimals={0}
-                    style={[styles.detailValue, { color: colors.white }]}
-                  />
-                  <Text style={[styles.detailSubtext, { color: colors.white }]}>
-                    {weatherData
-                      ? getPressureLevel(weatherData.pressure)
-                      : "--"}
-                  </Text>
-                </View>
-
-                <View
-                  style={[
-                    styles.detailCard,
-                    { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-                  ]}
-                >
-                  <Text style={[styles.detailLabel, { color: colors.white }]}>
-                    UV Index
-                  </Text>
-                  <AnimatedCounter
-                    value={weatherData ? weatherData.uvIndex : 0}
-                    suffix=""
-                    duration={1000}
-                    decimals={0}
-                    style={[styles.detailValue, { color: colors.white }]}
-                  />
-                  <Text style={[styles.detailSubtext, { color: colors.white }]}>
-                    {weatherData ? getUVIndexLevel(weatherData.uvIndex) : "--"}
-                  </Text>
-                </View>
-
-                <View
-                  style={[
-                    styles.detailCard,
-                    { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-                  ]}
-                >
-                  <Text style={[styles.detailLabel, { color: colors.white }]}>
-                    Visibility
-                  </Text>
-                  <AnimatedCounter
-                    value={weatherData ? weatherData.visibility / 1000 : 0}
-                    suffix=" km"
-                    duration={1000}
-                    decimals={1}
-                    style={[styles.detailValue, { color: colors.white }]}
-                  />
-                </View>
-
-                <View
-                  style={[
-                    styles.detailCard,
-                    { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-                  ]}
-                >
-                  <Text style={[styles.detailLabel, { color: colors.white }]}>
-                    Feels Like
-                  </Text>
-                  <AnimatedCounter
-                    value={weatherData ? weatherData.apparentTemperature : 0}
-                    suffix="°C"
-                    duration={1000}
-                    decimals={0}
-                    style={[styles.detailValue, { color: colors.white }]}
-                  />
-                </View>
-              </ScrollView>
+                keyExtractor={(item) => item.key}
+                renderItem={({ item }) => (
+                  <View
+                    style={[
+                      styles.detailCard,
+                      { backgroundColor: "rgba(255, 255, 255, 0.2)" },
+                    ]}
+                  >
+                    <Text style={[styles.detailLabel, { color: colors.white }]}>
+                      {item.label}
+                    </Text>
+                    <AnimatedCounter
+                      value={item.value}
+                      suffix={item.suffix}
+                      duration={1000}
+                      decimals={item.decimals}
+                      style={[styles.detailValue, { color: colors.white }]}
+                    />
+                    {item.subtext && (
+                      <Text
+                        style={[styles.detailSubtext, { color: colors.white }]}
+                      >
+                        {item.subtext}
+                      </Text>
+                    )}
+                  </View>
+                )}
+              />
             </Animated.View>
           </Animated.View>
         </ScrollView>

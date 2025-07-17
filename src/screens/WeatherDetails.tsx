@@ -38,6 +38,10 @@ import { getColors } from "../utils/colors";
 import { FONTFAMILY, FONTSIZE } from "../utils/fonts";
 import WeatherIconMapper from "../components/weather-icons/WeatherIconMapper";
 import AnimatedCounter from "../components/AnimatedCounter";
+import OverviewTab from "./weather-details/OverviewTab";
+import DetailsTab from "./weather-details/DetailsTab";
+import ForecastTab from "./weather-details/ForecastTab";
+import WindCompass from "../components/WindCompass";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
@@ -75,8 +79,6 @@ const WeatherDetailScreen: React.FC<WeatherDetailScreenProps> = ({
     { key: "details", title: "Details" },
     { key: "forecast", title: "Forecast" },
   ]);
-
-
 
   // Update color scheme based on system
   useEffect(() => {
@@ -174,286 +176,52 @@ const WeatherDetailScreen: React.FC<WeatherDetailScreenProps> = ({
       };
 
   // Wind Direction Compass Component
-  const WindCompass = () => (
-    <View style={styles.compassContainer}>
-      <View style={[styles.compassOuter, { borderColor: colors.white }]}>
-        <View
-          style={[
-            styles.compassInner,
-            { backgroundColor: "rgba(255, 255, 255, 0.1)" },
-          ]}
-        >
-          <Animated.View style={[styles.compassNeedle, compassStyle]}>
-            <View style={[styles.needle, { backgroundColor: colors.white }]} />
-          </Animated.View>
-          <Text
-            style={[
-              styles.compassLabel,
-              styles.compassN,
-              { color: colors.white },
-            ]}
-          >
-            N
-          </Text>
-          <Text
-            style={[
-              styles.compassLabel,
-              styles.compassE,
-              { color: colors.white },
-            ]}
-          >
-            E
-          </Text>
-          <Text
-            style={[
-              styles.compassLabel,
-              styles.compassS,
-              { color: colors.white },
-            ]}
-          >
-            S
-          </Text>
-          <Text
-            style={[
-              styles.compassLabel,
-              styles.compassW,
-              { color: colors.white },
-            ]}
-          >
-            W
-          </Text>
-        </View>
-      </View>
-      <Text style={[styles.compassText, { color: colors.white }]}>
-        {weatherData ? getWindDirection(weatherData.windDirection) : "--"}
-      </Text>
-    </View>
-  );
-
-  // Tab Scenes
-  const OverviewScene = () => (
-    <ScrollView style={styles.tabContent}>
-      <Animated.View style={[styles.overviewContainer, animatedContentStyle]}>
-        {/* Current Weather */}
-        <View style={styles.currentWeatherCard}>
-          <LinearGradient
-            colors={["rgba(255, 255, 255, 0.2)", "rgba(255, 255, 255, 0.1)"]}
-            style={styles.cardGradient}
-          >
-            <View style={styles.currentWeatherContent}>
-              {weatherData && (
-                <WeatherIconMapper
-                  weatherCode={weatherData.weatherCode}
-                  windSpeed={weatherData.windSpeed}
-                  size={80}
-                  iconColor={colors.white}
-                />
-              )}
-              <View style={styles.tempContainer}>
-                <AnimatedCounter
-                  value={
-                    weatherData
-                      ? convertTemperature(
-                          weatherData.temperature,
-                          temperatureUnit
-                        )
-                      : 0
-                  }
-                  suffix={`°${temperatureUnit}`}
-                  duration={1000}
-                  decimals={0}
-                  style={[styles.currentTemp, { color: colors.white }]}
-                />
-                <Text style={[styles.feelsLike, { color: colors.white }]}>
-                  Feels like{" "}
-                  {weatherData
-                    ? Math.round(
-                        convertTemperature(
-                          weatherData.apparentTemperature,
-                          temperatureUnit
-                        )
-                      )
-                    : 0}
-                  °{temperatureUnit}
-                </Text>
-              </View>
-            </View>
-            <Text style={[styles.condition, { color: colors.white }]}>
-              {weatherData
-                ? getWeatherCondition(weatherData.weatherCode)
-                : "Loading..."}
-            </Text>
-          </LinearGradient>
-        </View>
-
-        {/* Wind Direction */}
-        <View style={styles.windSection}>
-          <Text style={[styles.sectionTitle, { color: colors.white }]}>
-            Wind Direction
-          </Text>
-          <WindCompass />
-          <Text style={[styles.windSpeed, { color: colors.white }]}>
-            {weatherData ? weatherData.windSpeed.toFixed(1) : 0} km/h
-          </Text>
-        </View>
-      </Animated.View>
-    </ScrollView>
-  );
-
-  const DetailsScene = () => (
-    <ScrollView style={styles.tabContent}>
-      <Animated.View style={[styles.detailsGrid, animatedSlideStyle]}>
-        {/* Detailed Weather Cards */}
-        <View style={styles.detailRow}>
-          <View
-            style={[
-              styles.detailCard,
-              { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-            ]}
-          >
-            <Text style={[styles.detailLabel, { color: colors.white }]}>
-              Humidity
-            </Text>
-            <AnimatedCounter
-              value={weatherData ? weatherData.humidity : 0}
-              suffix="%"
-              duration={1000}
-              decimals={0}
-              style={[styles.detailValue, { color: colors.white }]}
-            />
-          </View>
-          <View
-            style={[
-              styles.detailCard,
-              { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-            ]}
-          >
-            <Text style={[styles.detailLabel, { color: colors.white }]}>
-              Pressure
-            </Text>
-            <AnimatedCounter
-              value={weatherData ? weatherData.pressure : 0}
-              suffix=" hPa"
-              duration={1000}
-              decimals={0}
-              style={[styles.detailValue, { color: colors.white }]}
-            />
-            <Text style={[styles.detailSubtext, { color: colors.white }]}>
-              {weatherData ? getPressureLevel(weatherData.pressure) : "--"}
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.detailRow}>
-          <View
-            style={[
-              styles.detailCard,
-              { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-            ]}
-          >
-            <Text style={[styles.detailLabel, { color: colors.white }]}>
-              UV Index
-            </Text>
-            <AnimatedCounter
-              value={weatherData ? weatherData.uvIndex : 0}
-              suffix=""
-              duration={1000}
-              decimals={0}
-              style={[styles.detailValue, { color: colors.white }]}
-            />
-            <Text style={[styles.detailSubtext, { color: colors.white }]}>
-              {weatherData ? getUVIndexLevel(weatherData.uvIndex) : "--"}
-            </Text>
-          </View>
-          <View
-            style={[
-              styles.detailCard,
-              { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-            ]}
-          >
-            <Text style={[styles.detailLabel, { color: colors.white }]}>
-              Visibility
-            </Text>
-            <AnimatedCounter
-              value={weatherData ? weatherData.visibility / 1000 : 0}
-              suffix=" km"
-              duration={1000}
-              decimals={1}
-              style={[styles.detailValue, { color: colors.white }]}
-            />
-            <Text style={[styles.detailSubtext, { color: colors.white }]}>
-              {weatherData ? getVisibilityLevel(weatherData.visibility) : "--"}
-            </Text>
-          </View>
-        </View>
-
-        {/* Temperature Unit Toggle */}
-        <View
-          style={[
-            styles.settingsCard,
-            { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-          ]}
-        >
-          <Text style={[styles.settingsLabel, { color: colors.white }]}>
-            Temperature Unit
-          </Text>
-          <View style={styles.unitToggle}>
-            <Text style={[styles.unitText, { color: colors.white }]}>°C</Text>
-            <Switch
-              value={temperatureUnit === "F"}
-              onValueChange={(value) => setTemperatureUnit(value ? "F" : "C")}
-              trackColor={{
-                false: "rgba(255, 255, 255, 0.3)",
-                true: "rgba(255, 255, 255, 0.3)",
-              }}
-              thumbColor={colors.white}
-            />
-            <Text style={[styles.unitText, { color: colors.white }]}>°F</Text>
-          </View>
-        </View>
-      </Animated.View>
-    </ScrollView>
-  );
-
-  const ForecastScene = () => (
-    <ScrollView style={styles.tabContent}>
-      <Animated.View style={[styles.forecastContainer, animatedSlideStyle]}>
-        <View
-          style={[
-            styles.forecastCard,
-            { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-          ]}
-        >
-          <Text style={[styles.forecastTitle, { color: colors.white }]}>
-            24-Hour Forecast
-          </Text>
-          <Text style={[styles.forecastNote, { color: colors.white }]}>
-            Extended forecast functionality would be implemented here with
-            hourly data
-          </Text>
-        </View>
-
-        <View
-          style={[
-            styles.forecastCard,
-            { backgroundColor: "rgba(255, 255, 255, 0.2)" },
-          ]}
-        >
-          <Text style={[styles.forecastTitle, { color: colors.white }]}>
-            7-Day Forecast
-          </Text>
-          <Text style={[styles.forecastNote, { color: colors.white }]}>
-            Weekly forecast with daily highs and lows would be displayed here
-          </Text>
-        </View>
-      </Animated.View>
-    </ScrollView>
-  );
+  <WindCompass
+    windDirection={weatherData?.windDirection ?? 0}
+    getWindDirection={getWindDirection}
+    colors={colors}
+    styles={styles}
+    compassStyle={compassStyle}
+  />;
 
   const renderScene = SceneMap({
-    overview: OverviewScene,
-    details: DetailsScene,
-    forecast: ForecastScene,
+    overview: () => (
+      <OverviewTab
+        weatherData={weatherData}
+        colors={colors}
+        animatedContentStyle={animatedContentStyle}
+        convertTemperature={convertTemperature}
+        setTemperatureUnit={setTemperatureUnit}
+        temperatureUnit={temperatureUnit}
+        getWeatherCondition={getWeatherCondition}
+        getWindDirection={getWindDirection}
+        currentTime={currentTime}
+        formatUTCTime={formatUTCTime}
+        styles={styles}
+      />
+    ),
+    details: () => (
+      <DetailsTab
+        weatherData={weatherData}
+        colors={colors}
+        animatedSlideStyle={animatedSlideStyle}
+        temperatureUnit={temperatureUnit}
+        getPressureLevel={getPressureLevel}
+        getUVIndexLevel={getUVIndexLevel}
+        getVisibilityLevel={getVisibilityLevel}
+        styles={styles}
+      />
+    ),
+    forecast: () => (
+      <ForecastTab
+        forecastData={weatherData?.forecast || []}
+        colors={colors}
+        animatedSlideStyle={animatedSlideStyle}
+        temperatureUnit={temperatureUnit}
+        convertTemperature={convertTemperature}
+        styles={styles}
+      />
+    ),
   });
 
   const renderTabBar = (props: any) => (
@@ -461,16 +229,22 @@ const WeatherDetailScreen: React.FC<WeatherDetailScreenProps> = ({
       {...props}
       indicatorStyle={{ backgroundColor: colors.white, height: 3 }}
       style={{ backgroundColor: "transparent", elevation: 0 }}
-      labelStyle={{
-        fontFamily: FONTFAMILY.semibold,
-        fontSize: FONTSIZE.sm,
-        color: colors.white,
-      }}
+      renderLabel={({ route, focused }) => (
+        <Text
+          style={{
+            fontFamily: FONTFAMILY.semibold,
+            fontSize: FONTSIZE.sm,
+            color: colors.white,
+            opacity: focused ? 1 : 0.6,
+          }}
+        >
+          {route.title}
+        </Text>
+      )}
       activeColor={colors.white}
-      inactiveColor={`${colors.white}80`}
+      inactiveColor={`${colors.primaryBg}`}
     />
   );
-
   if (error && !weatherData) {
     return (
       <LinearGradient

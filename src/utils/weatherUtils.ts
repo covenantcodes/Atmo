@@ -10,7 +10,7 @@ export const getBackgroundColors = (weatherCode: number, colorScheme?: 'light' |
   const primaryColor = '#22A37C';
   const secondaryColor = '#1a785aff';
   const deepBlue = '#4867bbff';
-  const primaryBg = '#E2FFF6';
+  const primaryBg = '#a0ffe1ff';
 
   // Use the same logic as splash screen
   if (colorScheme === 'dark') {

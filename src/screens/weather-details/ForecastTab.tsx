@@ -18,8 +18,8 @@ type ForecastTabProps = {
     [key: string]: string;
   };
   animatedSlideStyle?: object;
-  temperatureUnit: string;
-  convertTemperature?: (temp: number, unit: string) => number;
+  convertTemperature: (temp: number, unit: "C" | "F") => number;
+  temperatureUnit: "C" | "F";
   styles: { [key: string]: any };
 };
 
