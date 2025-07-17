@@ -242,7 +242,7 @@ const WeatherDetailScreen: React.FC<WeatherDetailScreenProps> = ({
         </Text>
       )}
       activeColor={colors.white}
-      inactiveColor={`${colors.primaryBg}`}
+      inactiveColor={`${colors.white}`}
     />
   );
   if (error && !weatherData) {
@@ -314,6 +314,20 @@ const WeatherDetailScreen: React.FC<WeatherDetailScreenProps> = ({
           initialLayout={{ width: screenWidth }}
           renderTabBar={renderTabBar}
           style={styles.tabView}
+          lazy
+          renderLazyPlaceholder={() => (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ color: colors.white, opacity: 0.7 }}>
+                Loading...
+              </Text>
+            </View>
+          )}
         />
       </SafeAreaView>
     </LinearGradient>
